@@ -1,16 +1,14 @@
 package org.example.Classes;
 
+import lombok.AllArgsConstructor;
 import org.example.Util;
 import lombok.Data;
 
 @Data
-public class Worker {
-    private String name;
-    private double money;
+public class Worker extends Employee {
 
     public Worker(String name, double money) {
-        this.name = name;
-        this.money = money;
+        super(name, money);
     }
 
     public boolean smoke(Match match) {
@@ -28,19 +26,4 @@ public class Worker {
             Util.messageBox("Рабочий " + name, name + " поработал\nСпичка зажглась. " + name + " доволен. " + name + " курнул сижки.");
     }
 
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public double getMoney() {
-//        return money;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public void setMoney(double money) {
-//        this.money = money;
-//    }
 }

@@ -10,15 +10,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
-import org.example.Classes.Car;
-import org.example.Classes.Plant;
-import org.example.Classes.Worker;
+import org.example.Classes.*;
 
 public class PrimaryController {
 
+
     Plant plant = new Plant();
-    ObservableList<String> itemsWorkers;
-    ObservableList<String> itemsCars;
+    Shop shop = new Shop();
+    Director director=new Director();
+    ObservableList<String> itemsWorkers=FXCollections.observableArrayList();
+    ObservableList<String> itemsProducts=FXCollections.observableArrayList();
+    ObservableList<String> itemsShop=FXCollections.observableArrayList();;
 
     @FXML
     private ResourceBundle resources;
@@ -33,24 +35,32 @@ public class PrimaryController {
     private TextField workerMoneyInput;
 
     @FXML
-    private TextField carNameInput;
-
-
-    @FXML
-    private ListView<String> listWorkers=new ListView<String>();//=new ListView<Worker>(listWorkers);
+    private TextField productNameInput;
 
     @FXML
-    private ListView<String> listCars=new ListView<String>();//=new ListView<Worker>(listWorkers);
+    private Label ProductionFocus;
 
+    @FXML
+    private ListView<String> listWorkers=new ListView<String>();
+
+    @FXML
+    private ListView<String> listProducts=new ListView<String>();
+
+    @FXML
+    private ListView<String> listShop=new ListView<String>();
 
     @FXML
     void buttonProduce(ActionEvent event) {
-        String name = carNameInput.getText();
-        plant.produce(name);
+        if (!plant.getProduct_type().equals("")) {
+            String name = productNameInput.getText();
+            plant.produce(name);
 
-        itemsCars=FXCollections.observableArrayList(plant.getCarsNamesArray());
-        listCars.setItems(itemsCars);
-
+            itemsProducts.setAll(plant.getProductsStringArray());
+            listProducts.setItems(itemsProducts);
+        }
+        else {
+            Util.messageBox("", "Не выбран продукт производства");
+        }
     }
 
     @FXML
@@ -58,10 +68,40 @@ public class PrimaryController {
         String name=workerNameInput.getText();
         int money=Integer.parseInt(workerMoneyInput.getText());
         Worker worker = new Worker(name, money);
-
         plant.hire(worker);
-        itemsWorkers=FXCollections.observableArrayList(plant.getWorkersNamesArray());
+
+        itemsWorkers.setAll(plant.getWorkersNamesArray());
         listWorkers.setItems(itemsWorkers);
+    }
+
+    @FXML
+    void sendProducts(ActionEvent event) {
+        shop.setProducts(plant.getProducts());
+        itemsShop.addAll(itemsProducts);
+
+        plant.clearProducts();
+        itemsProducts.clear();
+
+        listShop.setItems(itemsShop);
+        listProducts.setItems(itemsProducts);
+    }
+
+    @FXML
+    void buttonCarProduction(ActionEvent event) {
+        director.changeProductType(plant, "Car");
+        ProductionFocus.setText("Автомобили");
+    }
+
+    @FXML
+    void buttonMatchProduction(ActionEvent event) {
+        director.changeProductType(plant, "Match");
+        ProductionFocus.setText("Спички");
+    }
+
+    @FXML
+    void buttonPotProduction(ActionEvent event) {
+        director.changeProductType(plant, "Pot");
+        ProductionFocus.setText("Кастрюли");
     }
 
     @FXML

@@ -6,32 +6,45 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class Plant {
 
-    ArrayList<Worker> workers;
-    ArrayList<Car> cars;
+    public ArrayList<Worker> workers;
+    public ArrayList<Product> products;
+    public String product_type;
 
     public Plant() {
         workers = new ArrayList<Worker>();
-        cars = new ArrayList<Car>();
+        products = new ArrayList<Product>();
+        product_type = "";
     }
 
-
-    public static int prod_num=0;
+    public void clearProducts() {
+        products.clear();
+    }
 
     public void hire(Worker worker){
         workers.add(worker);
     }
 
-    public void produce(String car_title) {
-        prod_num++;
+    public void produce(String product_name) {
         for (Worker worker : workers) {
             worker.work();
         }
-        Car car = new Car(car_title);
-        cars.add(car);
+        if (product_type=="Car") {
+            Car car = new Car(product_name);
+            products.add(car);
+        }
+        if (product_type=="Pot") {
+            Pot pot = new Pot(product_name, 1);
+            products.add(pot);
+        }
+        if (product_type=="Match") {
+            Match match = new Match(product_name);
+            products.add(match);
+        }
     }
 
     public ArrayList<String> getWorkersNamesArray(){
@@ -41,28 +54,11 @@ public class Plant {
         }
         return names;
     }
-
-    public ArrayList<String> getCarsNamesArray(){
-        ArrayList<String> names=new ArrayList<String>();
-        for (Car car : cars) {
-            names.add(car.getTitle());
+    public ArrayList<String> getProductsStringArray(){
+        ArrayList<String> a=new ArrayList<String>();
+        for (Product product : products) {
+            a.add(product.toString());
         }
-        return names;
-    }
-
-    public ArrayList<Worker> getWorkers() {
-        return workers;
-    }
-
-    public void setWorkers(ArrayList<Worker> workers) {
-        this.workers = workers;
-    }
-
-    public ArrayList<Car> getCars() {
-        return cars;
-    }
-
-    public void setProducts(ArrayList<Car> cars) {
-        this.cars = cars;
+        return a;
     }
 }
